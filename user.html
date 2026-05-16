@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloxVerse Store | Premium Accounts & Fruits</title>
+    <style>
+        :root {
+            --bg-color: #060608;
+            --surface-color: rgba(20, 20, 27, 0.65);
+            --surface-card: rgba(30, 30, 41, 0.45);
+            --primary-color: #ff003c;
+            --primary-glow: rgba(255, 0, 60, 0.35);
+            --primary-hover: #e60036;
+            --text-color: #f5f5f7;
+            --text-muted: #9aa0b3;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --border-glow: rgba(255, 0, 60, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 60, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 60, 0.03) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Unique Cinematic Intro Overlays */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #020203;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
+        }
+
+        .intro-box {
+            text-align: center;
+        }
+
+        .intro-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: #fff;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: logoReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.3s;
+        }
+
+        .intro-logo span {
+            color: var(--primary-color);
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .intro-status {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInStatus 0.5s ease forwards 0.8s;
+        }
+
+        .intro-line {
+            width: 0px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            margin-top: 1.5rem;
+            animation: lineExpand 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.5s;
+        }
+
+        @keyframes logoReveal { to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeInStatus { to { opacity: 0.8; } }
+        @keyframes lineExpand { to { width: 240px; } }
+
+        /* Premium Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #060608; }
+        ::-webkit-scrollbar-thumb { background: #22222b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+
+        /* STICKY CUSTOMER AUTH GATE WINDOW */
+        .customer-auth-gate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4, 4, 6, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gate-box {
+            background: var(--surface-color);
+            border: 1px solid rgba(255, 0, 60, 0.2);
+            padding: 3rem 2.5rem;
+            border-radius: 16px;
+            width: 92%;
+            max-width: 420px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,60,0.05);
+        }
+
+        nav {
+            background: rgba(10, 10, 14, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+            text-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .nav-auth-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.6rem 1.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-auth-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Custom Segmented Tabs Selection */
+        .store-tabs {
+            display: inline-flex;
+            background: rgba(20, 20, 27, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem;
+            border-radius: 8px;
+            margin: 0 auto 2rem auto;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 0.7rem 2.2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: rgba(255, 0, 60, 0.12);
+            border: 1px solid rgba(255, 0, 60, 0.25);
+            box-shadow: inset 0 0 8px rgba(255, 0, 60, 0.05);
+        }
+
+        /* Cyberpunk Filter Dock Station */
+        .filter-dock {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .filter-group label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
+
+        .filter-select {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 0.55rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            min-width: 160px;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .store-view {
+            display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .store-view.active { display: block; }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Glassmorphic Cyber Cards */
+        .account-card {
+            background: var(--surface-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .account-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 0, 60, 0.3);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 0, 60, 0.06);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 0, 60, 0.15);
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-header {
+            background: linear-gradient(180deg, rgba(30, 30, 41, 0.6) 0%, rgba(20, 20, 27, 0.3) 100%);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+            max-width: 80%;
+        }
+
+        .card-price {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .info-section { margin-bottom: 1.25rem; }
+        .info-section:last-child { margin-bottom: 0; }
+
+        .info-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .info-value { font-size: 1rem; font-weight: 600; color: #e2e4e9; }
+
+        .buy-btn, .action-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .buy-btn:hover, .action-btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Premium Smooth Modal Engine Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 3, 5, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-content {
+            background: rgba(18, 18, 24, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 92%;
+            max-width: 420px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,60,0.05);
+        }
+
+        .detail-page-content { max-width: 620px; border: 1px solid rgba(255, 0, 60, 0.25); }
+
+        .detail-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-header h2 { text-transform: uppercase; font-size: 1.5rem; font-weight: 800; letter-spacing: 0.5px; }
+
+        .detail-price-badge {
+            background: rgba(255, 0, 60, 0.15);
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            padding: 0.5rem 1.2rem;
+            font-weight: 800;
+            font-size: 1.3rem;
+            border-radius: 6px;
+            text-shadow: 0 0 8px rgba(255, 0, 60, 0.2);
+        }
+
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+        @media (max-width: 520px) { .detail-grid { grid-template-columns: 1fr; } }
+
+        .detail-box { background: var(--surface-card); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 8px; }
+        .detail-box.full-width { grid-column: 1 / -1; }
+
+        .fruits-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+
+        .fruit-tag {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .fruit-tag:hover { border-color: var(--primary-color); background: rgba(255, 0, 60, 0.05); }
+
+        .close-modal { position: absolute; top: 1.25rem; right: 1.25rem; color: var(--text-muted); cursor: pointer; font-size: 1.6rem; transition: color 0.2s; line-height: 1; }
+        .close-modal:hover { color: #fff; }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+        .form-group input { width: 100%; background: var(--surface-card); border: 1px solid var(--border-color); padding: 0.85rem; color: white; border-radius: 6px; font-size: 0.95rem; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: var(--primary-color); background: rgba(30, 30, 41, 0.6); }
+
+        .auth-submit-btn { width: 100%; background: var(--primary-color); color: white; border: none; padding: 0.9rem; border-radius: 6px; font-weight: 700; font-size: 0.95rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 0.5rem; transition: background 0.2s; }
+        .auth-submit-btn:hover { background: var(--primary-hover); }
+        .switch-auth { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+        .switch-auth span { color: var(--primary-color); font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <!-- Cinematic Custom Grid Boot Intro Structure -->
+    <div id="intro-overlay">
+        <div class="intro-box">
+            <div class="intro-logo">BLOX<span>VERSE</span></div>
+            <div class="intro-status" id="introStatusText">INITIALIZING APP MODULES...</div>
+            <div class="intro-line"></div>
+        </div>
+    </div>
+
+    <!-- MANDATORY CLIENT ENTRANCE GATEWAY -->
+    <div class="customer-auth-gate" id="customerAuthGate">
+        <div class="gate-box">
+            <div class="logo" style="text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">BLOX<span>VERSE</span></div>
+            <h2 id="modalTitle" style="text-transform: uppercase; font-size: 1.3rem; font-weight:800; margin-bottom: 1.5rem; letter-spacing:0.5px; text-align: center;">Access Authorization</h2>
+            <form id="authForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="authEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="authPassword" required>
+                </div>
+                <button type="submit" class="auth-submit-btn" id="modalSubmitBtn">Sign In</button>
+                <div class="switch-auth" id="switchAuthMode">Don't have an account? <span>Register</span></div>
+            </form>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">BLOX<span>VERSE</span></div>
+        <button class="nav-auth-btn" id="authBtn">Sign Out</button>
+    </nav>
+
+    <div class="container">
+        <!-- Interactive Horizontal Segmented View Tabs Selector -->
+        <div class="store-tabs">
+            <button class="tab-btn active" id="tabAcc" onclick="switchCatalog('accounts')">Accounts Market</button>
+            <button class="tab-btn" id="tabFruit" onclick="switchCatalog('fruits')">Physical Fruits</button>
+        </div>
+
+        <!-- Cyberpunk Filter Dock Station -->
+        <div class="filter-dock">
+            <div class="filter-group">
+                <label>Sort Database By</label>
+                <select class="filter-select" id="sortEngineSelect">
+                    <option value="newest">Newest Entries</option>
+                    <option value="priceAsc">Price: Low to High</option>
+                    <option value="priceDesc">Price: High to Low</option>
+                    <option value="metricDesc" id="sortMetricLabel">Highest Level</option>
+                </select>
+            </div>
+
+            <div class="filter-group dynamic-acc-filter">
+                <label>Timeline Status</label>
+                <select class="filter-select" id="filterAgeSelect">
+                    <option value="all">All Generations</option>
+                    <option value="newYear">New Year Batch</option>
+                    <option value="oldGen">OG / Old Accounts</option>
+                </select>
+            </div>
+
+            <div class="filter-group dynamic-acc-filter">
+                <label>Minimum Fruits Stack</label>
+                <select class="filter-select" id="filterFruitCountSelect">
+                    <option value="0">Show All Items</option>
+                    <option value="3">3+ Fruits Unlocked</option>
+                    <option value="5">5+ Fruits Unlocked</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ACCOUNTS BOARD VIEW -->
+        <div id="accountsView" class="store-view active">
+            <div class="account-grid" id="accountsDisplay">
+                <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Loading live items database...</p>
+            </div>
+        </div>
+
+        <!-- DYNAMIC FRUITS BOARD VIEW -->
+        <div id="fruitsView" class="store-view">
+            <div class="account-grid" id="fruitsDisplay">
+                <p style="text-align: center; grid-column: 1/-1; color: var(--text-muted);">Loading live items database...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DYNAMIC CORE INFO OVERLAY PANEL -->
+    <div class="modal" id="detailPageModal">
+        <div class="modal-content detail-page-content">
+            <span class="close-modal" id="closeDetailBtn">&times;</span>
+            <div class="detail-header">
+                <div>
+                    <p id="detCategoryLabel" style="color: var(--primary-color); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Product Overview</p>
+                    <h2 id="detName">Item Name</h2>
+                </div>
+                <div class="detail-price-badge" id="detPrice">₹0</div>
+            </div>
+            <div class="detail-grid" id="modalDetailGrid"></div>
+            <button class="action-btn" id="emailDirectBtn" style="border-radius: 8px;">Buy Now via Email</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, orderBy, query, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBJpbu9QUUZ0ERF_mH_n1L6Vxq-P7IIaKs",
+          authDomain: "blox-a0d80.firebaseapp.com",
+          databaseURL: "https://blox-a0d80-default-rtdb.firebaseio.com",
+          projectId: "blox-a0d80",
+          storageBucket: "blox-a0d80.firebasestorage.app",
+          messagingSenderId: "1097520567625",
+          appId: "1:1097520567625:web:ffa961261e14ed70be7698",
+          measurementId: "G-YZX7ZVKQ6N"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isSignUpMode = false;
+        let currentUser = null;
+        let activeContactEmail = "admin@store.com";
+        
+        let globalAccountsData = [];
+        let globalFruitsData = [];
+        let operationalCatalogScope = 'accounts';
+
+        // Intro Sequence Pipeline
+        window.addEventListener('DOMContentLoaded', () => {
+            const statusText = document.getElementById('introStatusText');
+            const overlay = document.getElementById('intro-overlay');
+            setTimeout(() => { statusText.textContent = "ESTABLISHING SECURE GATEWAY..."; }, 700);
+            setTimeout(() => { statusText.textContent = "SYNCHRONIZING INVENTORY CONFIG..."; }, 1400);
+            setTimeout(() => {
+                if(overlay) {
+                    overlay.style.opacity = '0';
+                    overlay.style.transform = 'scale(1.04)';
+                    setTimeout(() => { overlay.style.display = 'none'; }, 800);
+                }
+            }, 2200);
+        });
+
+        const authBtn = document.getElementById('authBtn');
+        const customerAuthGate = document.getElementById('customerAuthGate');
+        const switchAuthMode = document.getElementById('switchAuthMode');
+        const authForm = document.getElementById('authForm');
+        const detailPageModal = document.getElementById('detailPageModal');
+        const closeDetailBtn = document.getElementById('closeDetailBtn');
+
+        const sortEngineSelect = document.getElementById('sortEngineSelect');
+        const filterAgeSelect = document.getElementById('filterAgeSelect');
+        const filterFruitCountSelect = document.getElementById('filterFruitCountSelect');
+        const sortMetricLabel = document.getElementById('sortMetricLabel');
+
+        window.switchCatalog = function(type) {
+            operationalCatalogScope = type;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.store-view').forEach(v => v.classList.remove('active'));
+            
+            if(type === 'accounts') {
+                document.getElementById('accountsView').classList.add('active');
+                document.getElementById('tabAcc').classList.add('active');
+                document.querySelectorAll('.dynamic-acc-filter').forEach(el => el.style.display = 'flex');
+                sortMetricLabel.textContent = "Highest Level";
+            } else {
+                document.getElementById('fruitsView').classList.add('active');
+                document.getElementById('tabFruit').classList.add('active');
+                document.querySelectorAll('.dynamic-acc-filter').forEach(el => el.style.display = 'none');
+                sortMetricLabel.textContent = "Highest Mastery";
+            }
+            sortEngineSelect.value = "newest";
+            filterAgeSelect.value = "all";
+            filterFruitCountSelect.value = "0";
+            applyFilterEnginePipeline();
+        }
+
+        sortEngineSelect.addEventListener('change', applyFilterEnginePipeline);
+        filterAgeSelect.addEventListener('change', applyFilterEnginePipeline);
+        filterFruitCountSelect.addEventListener('change', applyFilterEnginePipeline);
+
+        function fetchSettings() {
+            onSnapshot(doc(db, 'settings', 'contact_config'), (docSnap) => {
+                if(docSnap.exists()){ activeContactEmail = docSnap.data().contactEmail || "admin@store.com"; }
+            });
+        }
+        fetchSettings();
+
+        // AUTH STATE OBSERVER CONFIGURATION FOR LOCKED INTERFACE
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                customerAuthGate.style.display = 'none'; // Unlock complete website view
+            } else {
+                customerAuthGate.style.display = 'flex'; // Block content visibility
+            }
+        });
+
+        authBtn.addEventListener('click', () => {
+            if (currentUser) { 
+                signOut(auth).then(() => alert('Session signed out successfully! Website Locked.')); 
+            }
+        });
+
+        closeDetailBtn.addEventListener('click', () => detailPageModal.style.display = 'none');
+        
+        switchAuthMode.addEventListener('click', () => {
+            isSignUpMode = !isSignUpMode;
+            document.getElementById('modalTitle').textContent = isSignUpMode ? 'Register Account' : 'Access Authorization';
+            document.getElementById('modalSubmitBtn').textContent = isSignUpMode ? 'Sign Up' : 'Sign In';
+            switchAuthMode.innerHTML = isSignUpMode ? 'Already have an account? <span>Login</span>' : "Don't have an account? <span>Register</span>";
+        });
+
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            if (isSignUpMode) {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(() => { alert('Account registered successfully! Access granted.'); authForm.reset(); })
+                    .catch(err => alert(err.message));
+            } else {
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(() => { authForm.reset(); })
+                    .catch(err => alert(err.message));
+            }
+        });
+
+        function syncLiveCollections() {
+            onSnapshot(query(collection(db, 'blox_accounts'), orderBy('createdAt', 'desc')), (snapshot) => {
+                globalAccountsData = [];
+                snapshot.forEach(doc => { globalAccountsData.push({ id: doc.id, ...doc.data() }); });
+                if (operationalCatalogScope === 'accounts') applyFilterEnginePipeline();
+            });
+
+            onSnapshot(query(collection(db, 'blox_fruits'), orderBy('createdAt', 'desc')), (snapshot) => {
+                globalFruitsData = [];
+                snapshot.forEach(doc => { globalFruitsData.push({ id: doc.id, ...doc.data() }); });
+                if (operationalCatalogScope === 'fruits') applyFilterEnginePipeline();
+            });
+        }
+
+        function applyFilterEnginePipeline() {
+            if(operationalCatalogScope === 'accounts') {
+                let dataset = [...globalAccountsData];
+                const sortRule = sortEngineSelect.value;
+                const ageRule = filterAgeSelect.value;
+                const minFruits = parseInt(filterFruitCountSelect.value);
+
+                if(ageRule === 'newYear') {
+                    dataset = dataset.filter(item => item.timelineTag === 'newYear');
+                } else if(ageRule === 'oldGen') {
+                    dataset = dataset.filter(item => item.timelineTag === 'oldGen');
+                }
+
+                if(minFruits > 0) {
+                    dataset = dataset.filter(item => {
+                        if(!item.fruits) return false;
+                        const count = item.fruits.split(',').map(f => f.trim()).filter(f => f.length > 0).length;
+                        return count >= minFruits;
+                    });
+                }
+
+                if(sortRule === 'priceAsc') dataset.sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
+                else if(sortRule === 'priceDesc') dataset.sort((a,b) => parseFloat(b.price) - parseFloat(a.price));
+                else if(sortRule === 'metricDesc') dataset.sort((a,b) => parseInt(b.level) - parseInt(a.level));
+
+                renderAccountsViewGrid(dataset);
+            } else {
+                let dataset = [...globalFruitsData];
+                const sortRule = sortEngineSelect.value;
+
+                if(sortRule === 'priceAsc') dataset.sort((a,b) => parseFloat(a.price) - parseFloat(b.price));
+                else if(sortRule === 'priceDesc') dataset.sort((a,b) => parseFloat(b.price) - parseFloat(a.price));
+                else if(sortRule === 'metricDesc') dataset.sort((a,b) => parseInt(b.mastery) - parseInt(a.mastery));
+
+                renderFruitsViewGrid(dataset);
+            }
+        }
+
+        function renderAccountsViewGrid(arrayData) {
+            const displayArea = document.getElementById('accountsDisplay');
+            if(arrayData.length === 0) {
+                displayArea.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: var(--text-muted); padding: 2rem 0;">No accounts matched your selected filter preferences.</p>`;
+                return;
+            }
+            displayArea.innerHTML = '';
+            arrayData.forEach(data => {
+                const badgeText = data.timelineTag === 'newYear' ? 'New Year Batch' : 'OG / Old Gen';
+                const card = document.createElement('div');
+                card.className = 'account-card';
+                card.innerHTML = `
+                    <div class="card-badge">${badgeText}</div>
+                    <div class="card-header">
+                        <div class="card-title">${data.accountName}</div>
+                        <div class="card-price">₹${data.price}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-section">
+                            <div class="info-label">Account Structural Age</div>
+                            <div class="info-value">${data.age}</div>
+                        </div>
+                        <div class="info-section">
+                            <div class="info-label">Character Progression</div>
+                            <div class="info-value">Lv. ${data.level}</div>
+                        </div>
+                    </div>
+                    <button class="buy-btn purchase-account" data-id="${data.id}" style="border-radius: 0 0 11px 11px;">View Profile</button>
+                `;
+                displayArea.appendChild(card);
+            });
+
+            document.querySelectorAll('.purchase-account').forEach(btn => {
+                btn.addEventListener('click', (e) => showDetailedPage(e.target.dataset.id, 'accounts'));
+            });
+        }
+
+        function renderFruitsViewGrid(arrayData) {
+            const displayArea = document.getElementById('fruitsDisplay');
+            if(arrayData.length === 0) {
+                displayArea.innerHTML = `<p style="text-align: center; grid-column: 1/-1; color: var(--text-muted); padding: 2rem 0;">No physical fruits match your criteria.</p>`;
+                return;
+            }
+            displayArea.innerHTML = '';
+            arrayData.forEach(data => {
+                const card = document.createElement('div');
+                card.className = 'account-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${data.fruitName} Fruit</div>
+                        <div class="card-price">₹${data.price}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="info-section">
+                            <div class="info-label">Fruit Mastery Limit</div>
+                            <div class="info-value">${data.mastery} Level</div>
+                        </div>
+                    </div>
+                    <button class="buy-btn purchase-fruit" data-id="${data.id}" style="border-radius: 0 0 11px 11px;">View Details</button>
+                `;
+                displayArea.appendChild(card);
+            });
+
+            document.querySelectorAll('.purchase-fruit').forEach(btn => {
+                btn.addEventListener('click', (e) => showDetailedPage(e.target.dataset.id, 'fruits'));
+            });
+        }
+
+        async function showDetailedPage(id, category) {
+            const collectionName = category === 'accounts' ? 'blox_accounts' : 'blox_fruits';
+            const docRef = doc(db, collectionName, id);
+            const docSnap = await getDoc(docRef);
+            
+            if(docSnap.exists()) {
+                const data = docSnap.data();
+                const gridArea = document.getElementById('modalDetailGrid');
+                document.getElementById('detPrice').textContent = `₹${data.price}`;
+                
+                if(category === 'accounts') {
+                    document.getElementById('detCategoryLabel').textContent = "Account Overview";
+                    document.getElementById('detName').textContent = data.accountName;
+                    const fruitsArray = data.fruits ? data.fruits.split(',').map(f => f.trim()) : [];
+                    const fruitsHTML = fruitsArray.length > 0 ? fruitsArray.map(f => `<span class="fruit-tag">${f}</span>`).join('') : '<span style="color:var(--text-muted)">None listed</span>';
+                    
+                    gridArea.innerHTML = `
+                        <div class="detail-box">
+                            <div class="info-label">Account Structural Age</div>
+                            <div class="info-value" style="font-size: 1.05rem; margin-top: 0.2rem;">${data.age}</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="info-label">Character Progression</div>
+                            <div class="info-value" style="font-size: 1.05rem; margin-top: 0.2rem; color: var(--primary-color); font-weight:700;">Level ${data.level}</div>
+                        </div>
+                        <div class="detail-box full-width">
+                            <div class="info-label" style="margin-bottom: 0.5rem;">Unlocked Devil Fruits Inventory</div>
+                            <div class="fruits-tags">${fruitsHTML}</div>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('detCategoryLabel').textContent = "Fruit Overview";
+                    document.getElementById('detName').textContent = `${data.fruitName} Fruit`;
+                    gridArea.innerHTML = `
+                        <div class="detail-box full-width">
+                            <div class="info-label">Current Mastery Progression</div>
+                            <div class="info-value" style="font-size: 1.2rem; margin-top: 0.2rem; color: var(--primary-color); font-weight:800;">${data.mastery} Mastery Level</div>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('emailDirectBtn').onclick = () => {
+                    const itemName = category === 'accounts' ? data.accountName : `${data.fruitName} Fruit`;
+                    const detailsBody = category === 'accounts' 
+                        ? `- Account Name: ${data.accountName}\n- Character Level: ${data.level}\n- Account Age: ${data.age}`
+                        : `- Fruit Target: ${data.fruitName}\n- Mastery Level: ${data.mastery}`;
+
+                    const subject = encodeURIComponent(`Purchase Inquiry: ${itemName}`);
+                    const body = encodeURIComponent(`Hello!\n\nI want to purchase the following item:\n${detailsBody}\n- Listed Price: ₹${data.price}\n\nPlease let me know how I can proceed with the payment.\n\nThank you!`);
+                    window.open(`mailto:${activeContactEmail}?subject=${subject}&body=${body}`, '_self');
+                };
+                detailPageModal.style.display = 'flex';
+            }
+        }
+
+        syncLiveCollections();
+    </script>
+</body>
+</html>
